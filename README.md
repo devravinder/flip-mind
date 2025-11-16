@@ -1,73 +1,210 @@
-# React + TypeScript + Vite
+# 🧠 FlipMind — Memory Card Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A modern memory card game built with **React + TypeScript + TailwindCSS + shadcn/ui + TanStack Router + TanStack DB**.
+> Flip cards, match pairs, and challenge your memory — play solo vs. bot or with friends!
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
 
-## React Compiler
+**FlipMind** is a fun and interactive **memory match** game where players take turns flipping two hidden cards to find matching pairs.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The game ends when all pairs are matched — the player with the most matches wins!
+You can play **against the bot** (default mode) or **with friends** in pass-and-play mode.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🧩 Game Rules
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Minimum **two players** required:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+   * Human vs Bot (default)
+   * Human vs Human (pass & play)
+2. The board starts with **20 cards** (10 pairs).
+3. On a turn:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   * Player flips **two cards**.
+   * If both cards **match** → player scores +1 and plays again.
+   * If both cards **don’t match** → cards flip back and next player’s turn begins.
+4. Game ends when **all cards are cleared**.
+5. **Winner:** player with the most matched pairs.
+
+---
+
+## ⚙️ Features
+
+| Feature          | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| 🎮 Game Modes    | Play with Bot / Play with Friend (pass & play)  |
+| 👥 Multiplayer   | Up to 20 players                                |
+| 🧱 Dynamic Cards | Choose number of cards (up to 100, always even) |
+| 🤖 Smart Bot     | AI logic remembers flipped cards                |
+| 🧠 Scoreboard    | Tracks turns and earned pairs                   |
+| 🧩 Custom Icons  | Uses Lucide icons for cards                     |
+| 🎨 UI            | Tailwind + shadcn for a minimal, modern design  |
+| 🔁 Replay        | Restart anytime or switch mode mid-game         |
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer     | Technology                       |
+| --------- | -------------------------------- |
+| Framework | React + TypeScript               |
+| Styling   | TailwindCSS + shadcn/ui          |
+| Routing   | TanStack Router                  |
+| State/DB  | TanStack Query / TanStack DB     |
+| Icons     | Lucide Icons                     |
+| Animation | CSS transitions for flip effects |
+
+---
+
+## 📁 Project Structure
+
+```bash
+flipmind/
+├── src/
+│   ├── components/
+│   │   ├── Card.tsx
+│   │   ├── GameBoard.tsx
+│   │   ├── ScoreBoard.tsx
+│   │   ├── PlayerPanel.tsx
+│   │   └── ModeSelector.tsx
+│   ├── hooks/
+│   │   ├── useGameLogic.ts
+│   │   ├── useBotLogic.ts
+│   │   └── useShuffle.ts
+│   ├── utils/
+│   │   ├── generateCards.ts
+│   │   ├── constants.ts
+│   │   └── helpers.ts
+│   ├── pages/
+│   │   └── GamePage.tsx
+│   ├── data/
+│   │   └── icons.ts
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── public/
+│   └── favicon.ico
+├── package.json
+├── tailwind.config.ts
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧠 Core Logic
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Card Generation
+
+* Randomly shuffle pairs of icons using `generateCards()`.
+* Always produce an **even number** of cards.
+
+### 2. Turn-Based System
+
+* Game state managed by `useGameLogic()` hook.
+* Keeps track of:
+
+  * `currentPlayer`
+  * `flippedCards`
+  * `matchedCards`
+  * `scoreBoard`
+
+### 3. Bot Logic
+
+* Implemented in `useBotLogic()`.
+* Bot “remembers” previously flipped cards.
+* Random move if memory doesn’t help.
+
+### 4. Match Detection
+
+```ts
+if (flipped[0].icon === flipped[1].icon) {
+  markAsMatched(flipped);
+  addPoints(currentPlayer);
+} else {
+  nextPlayer();
+}
 ```
+
+---
+
+## 💻 Installation & Setup
+
+### Prerequisites
+
+* Node.js ≥ 18
+* npm / pnpm / bun
+
+### Setup
+
+```bash
+# Clone repo
+git clone https://github.com/<your-username>/flipmind.git
+cd flipmind
+
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+```
+
+Then open 👉 [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 🧑‍💻 Available Commands
+
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start development server |
+| `npm run build`   | Build production bundle  |
+| `npm run preview` | Preview production build |
+| `npm run lint`    | Run linter               |
+
+---
+
+## 🎨 UI Preview (Concept)
+
+```bash
++--------------------------------+
+| Player: Rabindranath  🔁 Bot   |
+|--------------------------------|
+| [🂠][🂠][🂠][🂠][🂠]               |
+| [🂠][🂠][🂠][🂠][🂠]               |
+| [🂠][🂠][🂠][🂠][🂠]               |
+| [🂠][🂠][🂠][🂠][🂠]               |
+|--------------------------------|
+| Scores: 🧑 3 | 🤖 5              |
++--------------------------------+
+```
+
+* Flip animation on hover/click.
+* Disabled interaction when not player’s turn.
+* Winner message when board is cleared.
+
+---
+
+## 🏁 Future Enhancements
+
+* ⏱️ Add timer and leaderboard.
+* 🌐 Multiplayer via WebSocket.
+* 📱 Mobile touch optimizations.
+* 🎵 Add sound effects for flips/matches.
+* 🧩 Theme customization (card back designs).
+
+---
+
+## 📜 License
+
+MIT License © 2025 [Ravinder Reddy Kothabad]
+
+---
+
+## 🙌 Credits
+
+* **UI Components:** [shadcn/ui](https://ui.shadcn.com)
+* **Routing & State:** [TanStack](https://tanstack.com)
+* **Icons:** [Lucide Icons](https://lucide.dev)
