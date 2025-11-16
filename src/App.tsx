@@ -11,7 +11,7 @@ import { useTheme } from './hooks/useTheme';
 function App() {
   const { theme, toggleTheme } = useTheme();
   const { gameState, settings, flipCard, resetGame } = useGameState({
-    // mode: 'bot',
+    mode: 'friend',
     cardCount: 10,
     playerCount: 2,
   });

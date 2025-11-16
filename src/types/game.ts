@@ -29,7 +29,7 @@ export interface GameState {
 }
 
 export interface GameSettings {
-  mode?: GameMode;
+  mode: GameMode;
   cardCount: number;
   playerCount: number;
 }
