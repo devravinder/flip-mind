@@ -1,32 +1,33 @@
 import type { Card, CardIcon, GameMode, Player } from "@/hooks/useGameState";
 
 export const AVAILABLE_ICONS: CardIcon[] = [
-  // ❤️ Emotions & Human
+
+  // keep important first
   "Heart",
-  "Brain",
-  "Star",
-  "Crown",
-  "Trophy",
   "Medal",
   "Gift",
-  "Rose",
   "BicepsFlexed",
+  "Sun",
+  "Brain",
+  "Fish",
+  "Bird",
+  "Star",
+  "Trophy",
+  
+
+
+  //===
+  "Crown",
+  "Rose",
   "BedDouble",
 
-  // 🌍 Nature & Elements
-  "Sun",
   "Moon",
-  "Cloud",
   "Flame",
   "Leaf",
-  "Flower",
+  "Flower2",
   "Feather",
-  "Mountain",
-  "Fish",
   "Rabbit",
-  "Bird",
 
-  // ☕ Everyday Life & Objects
   "Coffee",
   "BookA",
   "Calendar1",
@@ -38,7 +39,6 @@ export const AVAILABLE_ICONS: CardIcon[] = [
   "Music",
   "Lightbulb",
 
-  // ⚙️ Tools & Machines
   "Camera",
   "Briefcase",
   "Bus",
@@ -48,24 +48,19 @@ export const AVAILABLE_ICONS: CardIcon[] = [
   "EvCharger",
   "FireExtinguisher",
 
-  // 🛡️ Protection & Strength
   "Shield",
   "Anchor",
   "Flag",
-  "ChessKnight",
 
-  // 🌐 Concepts & Tech
   "Wifi",
   "Target",
   "Globe",
   "Aperture",
   "DraftingCompass",
   "Disc3",
-  "Radio",
   "Bug",
   "Hexagon",
 
-  // 🌀 Abstract / Misc
   "Eye",
   "Wind",
   "Compass",
