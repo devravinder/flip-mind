@@ -86,20 +86,21 @@ export const generateCards = (cardCount: number): Card[] => {
   const selectedIcons = AVAILABLE_ICONS.slice(0, pairCount);
 
 
-  const nonIdCards:Omit<Card,"id">[] = selectedIcons.map((icon)=>[{
+  const cards = selectedIcons.map((icon)=>[{
+        id: `${icon}-1`,
         icon,
         isFlipped: false,
         isMatched: false,
       },
       {
+        id: `${icon}-2`,
         icon,
         isFlipped: false,
         isMatched: false,
       }]).flatMap(e=>e)
 
 
-  const cards: Card[] = shuffleArray(nonIdCards).map((ele,index)=>({...ele, id: index}));
-  return cards;
+  return shuffleArray(cards);
 };
 
 export const createPlayer = (
@@ -107,7 +108,7 @@ export const createPlayer = (
   isBot: boolean,
   name?: string
 ): Player => ({
-  id: index,
+  id: `player-${index}`,
   name: isBot ? `Bot` : name || `Player ${index}`,
   score: 0,
   isBot,

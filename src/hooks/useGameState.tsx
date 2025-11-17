@@ -1,18 +1,18 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
-import * as Icons from "lucide-react";
+import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { createPlayers, generateCards, playSound } from "@/utils/gameUtils";
 import GameSettings from "@/components/GameSettings";
 export type CardIcon = keyof typeof Icons;
+import * as Icons from "lucide-react";
 
 export interface Card {
-  id: number;
+  id: string;
   icon: CardIcon;
   isFlipped: boolean;
   isMatched: boolean;
 }
 
 export interface Player {
-  id: number;
+  id: string;
   name: string;
   score: number;
   isBot: boolean;
@@ -27,16 +27,13 @@ export interface GameState {
   cards: Card[];
   players: Player[];
   currentPlayerIndex: number;
-  flippedCardIndices: number[];
+  flippedCards: string[];
   isProcessing: boolean;
   gameStatus: "setup" | "playing" | "ended";
   winner: string | null;
-  setGameState: <K extends keyof GameState>(
-    key: K,
-    value: GameState[K]
-  ) => void;
+  isBotTurn: boolean,
   resetGame: (settings?: Partial<GameSettings>) => void;
-  flipCard: (cardId: number) => void;
+  flipCard: (cardId: string) => void;
 }
 
 export interface GameSettings {
@@ -57,11 +54,11 @@ const initialState: GameState = {
   cards: [],
   players: [],
   currentPlayerIndex: 0,
-  flippedCardIndices: [],
+  flippedCards: [],
   isProcessing: false,
   gameStatus: "playing",
   winner: null,
-  setGameState: () => {},
+  isBotTurn:false,
   resetGame: () => {},
   flipCard: () => {},
 };
@@ -81,53 +78,12 @@ export const GameStateProvider = ({
     createPlayers(initialSettings.playerCount, initialSettings.mode)
   );
 
-  const [flippedCardIndices, setFlippedCardIndices] = useState<number[]>([]);
+  const [flippedCards, setFlippedCards] = useState<string[]>([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
   const [winner, setWinner] = useState<string | null>(null);
-
-  // we can pass all the setter seperately
-  const setGameState = <K extends keyof GameState>(
-    key: K,
-    value: GameState[K]
-  ) => {
-    switch (key) {
-      case "settings": {
-        setSettings(value as GameSettings);
-        return;
-      }
-      case "cards": {
-        setCards(value as Card[]);
-        return;
-      }
-      case "players": {
-        setPlayers(value as Player[]);
-        return;
-      }
-      case "flippedCardIndices": {
-        setFlippedCardIndices(value as number[]);
-        return;
-      }
-      case "currentPlayerIndex": {
-        setCurrentPlayerIndex(value as number);
-        return;
-      }
-      case "isProcessing": {
-        setIsProcessing(value as boolean);
-        return;
-      }
-      case "gameStatus": {
-        setGameStatus(value as GameStatus);
-        return;
-      }
-      case "winner": {
-        setWinner(value as string);
-        return;
-      }
-    }
-  };
 
   const resetGame = (newSettings?: Partial<GameSettings>) => {
     const updatedSettings = { ...settings, ...newSettings };
@@ -136,6 +92,7 @@ export const GameStateProvider = ({
     setPlayers(
       createPlayers(updatedSettings.playerCount, updatedSettings.mode)
     );
+    setFlippedCards([])
     setCurrentPlayerIndex(0);
     setIsProcessing(false);
     setGameStatus("playing");
@@ -146,20 +103,19 @@ export const GameStateProvider = ({
     cards: Card[],
     players: Player[],
     currentPlayerIndex: number,
-    flippedCardIndices: number[]
+    flippedCards: string[]
   ) => {
     setIsProcessing(true);
 
     setTimeout(() => {
-      const [firstCardId, secondCardId] = flippedCardIndices;
-      const firstCard = cards[firstCardId];
-      const secondCard = cards[secondCardId];
+      const [firstCard, secondCard] = cards.filter(card=>flippedCards.includes(card.id));
+
       if (!firstCard || !secondCard) return;
 
       const isMatch = firstCard.icon === secondCard.icon;
 
       const newCards = cards.map((card) => {
-        if (card.id === firstCardId || card.id === secondCardId) {
+        if (card.id === firstCard.id || card.id === secondCard.id) {
           return isMatch
             ? { ...card, isMatched: true }
             : { ...card, isFlipped: false };
@@ -191,7 +147,7 @@ export const GameStateProvider = ({
       //===
       setCards(newCards);
       setPlayers(newPlayers);
-      setFlippedCardIndices([]);
+      setFlippedCards([]);
       setGameStatus(allMatched ? "ended" : "playing");
       setCurrentPlayerIndex(
         isMatch ? currentPlayerIndex : (currentPlayerIndex + 1) % players.length
@@ -202,37 +158,40 @@ export const GameStateProvider = ({
       setIsProcessing(false);
     }, 1000);
   };
-  const flipCard = (cardId: number) => {
-    if (isProcessing || flippedCardIndices.length >= 2) return;
+  const flipCard = (cardId: string) => {
+    if (isProcessing || flippedCards.length >= 2) return;
 
     playSound("tap");
     const newCards = cards.map((card) =>
       card.id === cardId ? { ...card, isFlipped: true } : card
     );
 
-    const newFlippedCardIndices = [...flippedCardIndices, cardId];
+    const newFlippedCards = [...flippedCards, cardId];
     setCards(newCards);
-    setFlippedCardIndices(newFlippedCardIndices);
+    setFlippedCards(newFlippedCards);
 
-    if (newFlippedCardIndices.length == 2)
+    if (newFlippedCards.length == 2)
       onSecondCardFlip(
         newCards,
         players,
         currentPlayerIndex,
-        newFlippedCardIndices
+        newFlippedCards
       );
   };
+
+
+  const isBotTurn = useMemo(() => settings.mode=="bot" && currentPlayerIndex===1, [settings.mode, currentPlayerIndex])
 
   const value = {
     settings,
     cards,
     players,
     currentPlayerIndex,
-    flippedCardIndices,
+    flippedCards,
     isProcessing,
     gameStatus,
     winner,
-    setGameState,
+    isBotTurn,
     resetGame,
     flipCard,
   };

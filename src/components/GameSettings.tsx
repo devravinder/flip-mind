@@ -109,7 +109,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                 </label>
                 <input
                   type="range"
-                  min="10"
+                  min="4"
                   max="100"
                   step="2"
                   value={settings.cardCount}
@@ -119,7 +119,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>20</span>
+                  <span>4</span>
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     {settings.cardCount}
                   </span>

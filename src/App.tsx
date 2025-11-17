@@ -1,17 +1,27 @@
-import useBotPlayer from './hooks/useBotPlayer';
-import GameBoard from './components/GameBoard';
-import ScoreBoard from './components/ScoreBoard';
-import GameSettings from './components/GameSettings';
-import WinnerModal from './components/WinnerModal';
-import ThemeToggle from './components/ThemeToggle';
-import { Brain } from 'lucide-react';
-import { useTheme } from './hooks/useTheme';
-import { useGameState } from './hooks/useGameState';
+import useBotPlayer from "./hooks/useBotPlayer";
+import GameBoard from "./components/GameBoard";
+import ScoreBoard from "./components/ScoreBoard";
+import GameSettings from "./components/GameSettings";
+import WinnerModal from "./components/WinnerModal";
+import ThemeToggle from "./components/ThemeToggle";
+import { Brain } from "lucide-react";
+import { useTheme } from "./hooks/useTheme";
+import { useGameState } from "./hooks/useGameState";
 
 function App() {
   const { theme, toggleTheme } = useTheme();
- const {flipCard ,settings, resetGame,gameStatus, players, cards, isProcessing, winner, currentPlayerIndex} = useGameState()
-
+  const {
+    flipCard,
+    settings,
+    resetGame,
+    gameStatus,
+    players,
+    cards,
+    isProcessing,
+    winner,
+    currentPlayerIndex,
+    isBotTurn,
+  } = useGameState();
 
   useBotPlayer();
 
@@ -37,19 +47,16 @@ function App() {
           </p>
         </header>
 
-        <ScoreBoard
-          players={players}
-          currentPlayerIndex={currentPlayerIndex}
-        />
+        <ScoreBoard players={players} currentPlayerIndex={currentPlayerIndex} />
 
         <GameBoard
           cards={cards}
           onCardFlip={flipCard}
-          disabled={isProcessing}
+          disabled={isProcessing || isBotTurn}
         />
       </div>
 
-      {gameStatus === 'ended' && winner && (
+      {gameStatus === "ended" && winner && (
         <WinnerModal winner={winner} onRestart={() => resetGame()} />
       )}
     </div>

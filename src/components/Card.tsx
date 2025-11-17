@@ -4,7 +4,7 @@ import { type Card as CardType } from '@/hooks/useGameState';
 
 interface CardProps {
   card: CardType;
-  onFlip: (cardId: number) => void;
+  onFlip: (cardId: string) => void;
   disabled: boolean;
 }
 
