@@ -58,7 +58,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                       }
                     `}
                   >
-                    vs Bot
+                    Bot
                   </button>
                   <button
                     onClick={() => onSettingsChange({ mode: 'pass-play' })}
@@ -71,7 +71,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                       }
                     `}
                   >
-                    vs Friend
+                    Pass and Play
                   </button>
                 </div>
               </div>
