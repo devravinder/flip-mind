@@ -1,5 +1,5 @@
 import { Bot, User } from "lucide-react";
-import { type Player } from "@/types/game";
+import { type Player } from "@/hooks/useGameState";
 
 interface PlayerPanelProps {
   player: Player;

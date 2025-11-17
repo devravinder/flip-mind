@@ -1,10 +1,10 @@
-import { type Card as CardType } from '@/types/game';
+import { type Card as CardType } from '@/hooks/useGameState';
 import Card from './Card';
 import { boardWidth } from '@/utils/gameUtils';
 
 interface GameBoardProps {
   cards: CardType[];
-  onCardFlip: (cardId: string) => void;
+  onCardFlip: (cardId: number) => void;
   disabled: boolean;
 }
 

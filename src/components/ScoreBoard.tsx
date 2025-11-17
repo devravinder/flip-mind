@@ -1,4 +1,4 @@
-import { type Player } from '@/types/game';
+import { type Player } from '@/hooks/useGameState';
 import PlayerPanel from './PlayerPanel';
 import { userColors } from '@/utils/gameUtils';
 
