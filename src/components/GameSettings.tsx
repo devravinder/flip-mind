@@ -1,6 +1,6 @@
 import { Settings, X, Users, Grid3x3, Gamepad2 } from 'lucide-react';
 import { useState } from 'react';
-import { type GameSettings as GameSettingsType } from '@/types/game';
+import { type GameSettings as GameSettingsType } from '@/hooks/useGameState';
 
 interface GameSettingsProps {
   settings: GameSettingsType;
@@ -61,11 +61,11 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                     vs Bot
                   </button>
                   <button
-                    onClick={() => onSettingsChange({ mode: 'friend' })}
+                    onClick={() => onSettingsChange({ mode: 'pass-play' })}
                     className={`
                       p-3 rounded-lg border-2 font-medium transition-all
                       ${
-                        settings.mode === 'friend'
+                        settings.mode === 'pass-play'
                           ? 'border-blue-500 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300'
                           : 'border-gray-300 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700'
                       }
@@ -76,7 +76,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                 </div>
               </div>
 
-              {settings.mode === 'friend' && (
+              {settings.mode === 'pass-play' && (
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Users className="w-4 h-4" />
@@ -109,7 +109,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                 </label>
                 <input
                   type="range"
-                  min="10"
+                  min="4"
                   max="100"
                   step="2"
                   value={settings.cardCount}
@@ -119,7 +119,7 @@ const GameSettings = ({ settings, onSettingsChange, onRestart }: GameSettingsPro
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>20</span>
+                  <span>4</span>
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     {settings.cardCount}
                   </span>

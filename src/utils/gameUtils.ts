@@ -1,4 +1,4 @@
-import type { Card, CardIcon, Player } from "@/types/game";
+import type { Card, CardIcon, GameMode, Player } from "@/hooks/useGameState";
 
 export const AVAILABLE_ICONS: CardIcon[] = [
   // ❤️ Emotions & Human
@@ -85,23 +85,20 @@ export const generateCards = (cardCount: number): Card[] => {
   const pairCount = cardCount / 2;
   const selectedIcons = AVAILABLE_ICONS.slice(0, pairCount);
 
-  const cards: Card[] = [];
-  selectedIcons.forEach((icon, index) => {
-    cards.push(
-      {
-        id: `${icon}-1-${index}`,
+
+  const cards = selectedIcons.map((icon)=>[{
+        id: `${icon}-1`,
         icon,
         isFlipped: false,
         isMatched: false,
       },
       {
-        id: `${icon}-2-${index}`,
+        id: `${icon}-2`,
         icon,
         isFlipped: false,
         isMatched: false,
-      }
-    );
-  });
+      }]).flatMap(e=>e)
+
 
   return shuffleArray(cards);
 };
@@ -114,13 +111,12 @@ export const createPlayer = (
   id: `player-${index}`,
   name: isBot ? `Bot` : name || `Player ${index}`,
   score: 0,
-  earnedCards: [],
   isBot,
 });
 
 export const createPlayers = (
   playerCount: number,
-  mode?: "bot" | "friend",
+  mode?: GameMode,
 ): Player[] => {
   if (mode === "bot") {
     return [createPlayer(1, false, "Me"), createPlayer(2, true)];
@@ -175,7 +171,7 @@ export const userColors = [
 
 
 export  const playSound = (type: 'tap' | 'match' | 'winner') => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)()
     const now = audioContext.currentTime
 
     if (type === 'tap') {
@@ -223,3 +219,5 @@ export  const playSound = (type: 'tap' | 'match' | 'winner') => {
     });
     }
   }
+
+  export const sleep=(ms:number=1000)=>new Promise((res)=>setTimeout(res,ms))
