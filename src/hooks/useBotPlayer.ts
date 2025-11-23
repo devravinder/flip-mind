@@ -7,7 +7,7 @@ export default function useBotPlayer() {
     useGameState();
 
   const shouldGuessPairs = () => {
-    const propability = [true, false, true]; // 66%
+    const propability = [false, false, true]; // 66%
 
     return propability[Math.round(Math.random() * propability.length)];
   };

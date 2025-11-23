@@ -1,4 +1,4 @@
-# 🧠 FlipMind — Memory Card Game
+# 🧠 [FlipMind — Memory Card Game](https://flip-mind.paravartech.com/)
 
 > A modern memory card game built with **React + TypeScript + TailwindCSS + shadcn/ui + TanStack Router + TanStack DB**.
 > Flip cards, match pairs, and challenge your memory — play solo vs. bot or with friends!
