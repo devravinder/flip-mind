@@ -20,7 +20,7 @@ const WinnerModal = ({ winner, onRestart }: WinnerModalProps) => {
             <span className="font-semibold text-blue-600 dark:text-blue-400">
               {winner}
             </span>{' '}
-            wins!
+            won!
           </p>
         </div>
 

@@ -7,7 +7,7 @@ import { GameStateProvider } from "./hooks/useGameState.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <GameStateProvider initialSettings={{mode:"pass-play",cardCount:10, playerCount:2}}>
+    <GameStateProvider initialSettings={{mode:"pass-play",cardCount:14, playerCount:2}}>
       <ThemeProvider>
         <App />
       </ThemeProvider>
